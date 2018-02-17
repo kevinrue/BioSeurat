@@ -1,5 +1,5 @@
 [![Travis-CI Build Status](https://travis-ci.org/kevinrue/SeuratConverter.svg?branch=master)](https://travis-ci.org/kevinrue/SeuratConverter)
-[![Coverage Status](https://codecov.io/github/kevinrue/SeuratConverter/coverage.svg?branch=master)](https://codecov.io/github/kevinrue/SeuratConverter?branch=master)
+[![codecov Status](https://codecov.io/gh/kevinrue/SeuratConverter/branch/master/graph/badge.svg?token=By8PFPNXX7)](https://codecov.io/gh/kevinrue/SeuratConverter)
 
 # `SeuratConverter`
 
