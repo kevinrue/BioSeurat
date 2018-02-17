@@ -52,7 +52,7 @@ The `r Githubpkg("kevinrue/SeuratConverter")` package is currently hosted
 on GitHub, and may be installed as follows:
 
 ```{r install, eval=FALSE}
-devtools::install_github("kevinrue/SeuratConverter")
+devtools::install_github("kevinrue/SeuratConverter", build_vignettes = TRUE)
 ```
 
 ## Loading packages

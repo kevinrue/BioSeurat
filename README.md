@@ -24,3 +24,12 @@ Indeed, the `SingleCellExperiment` class contains slots to store:
     `@var.genes` slot of a `seurat` object
 * any number of reduced dimensions sets of coordinates, that are usually
     stored under the `@dr` slot of a `seurat` object
+
+## Installation
+
+The `r Githubpkg("kevinrue/SeuratConverter")` package is currently hosted
+on GitHub, and may be installed as follows:
+
+```{r install, eval=FALSE}
+devtools::install_github("kevinrue/SeuratConverter", build_vignettes = TRUE)
+```
