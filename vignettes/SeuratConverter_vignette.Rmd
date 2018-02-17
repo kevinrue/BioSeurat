@@ -121,9 +121,9 @@ The `ScaleData` function populates the `@scale.data` slot of `seurat`
 objects (while also storing the associated parameters in
 the `@calc.params` slot):
 
-```{r ScaleData}
-pbmc_small <-
-    ScaleData(object = pbmc_small, vars.to.regress = c("nUMI"))
+```{r ScaleData, message=FALSE}
+pbmc_small <- ScaleData(
+    object = pbmc_small, vars.to.regress = c("nUMI"), display.progress = FALSE)
 dim(pbmc_small@scale.data)
 ```
 
@@ -162,7 +162,7 @@ under the `@dr` slot (while also storing the associated parameters in
 the `@calc.params` slot):
 
 ```{r RunPCA}
-pbmc_small <- RunPCA(pbmc_small)
+pbmc_small <- RunPCA(pbmc_small, do.print = FALSE)
 names(pbmc_small@dr)
 pbmc_small <-
     RunTSNE(pbmc_small, reduction.use = "pca", dims.use = 1:5, perplexity=10)
@@ -189,7 +189,7 @@ pbmc1 <- SubsetData(pbmc_small,cells.use = pbmc_small@cell.names[1:40])
 pbmc2 <- SubsetData(pbmc_small,cells.use = pbmc_small@cell.names[41:80])
 pbmc1@meta.data$group <- "group1"
 pbmc2@meta.data$group <- "group2"
-pbmc_cca <- RunCCA(pbmc1,pbmc2)
+pbmc_cca <- RunCCA(pbmc1, pbmc2)
 pbmc_cca <- AlignSubspace(
     pbmc_cca,reduction.type = "cca", grouping.var = "group", dims.align = 1:2)
 names(pbmc_cca@dr)
@@ -200,7 +200,7 @@ objects are _not_ transferred to the new combined `seurat` objects.
 If desired, they need to be re-computed on the new object:
 
 ```{r RunCCA_PCA}
-pbmc_cca <- RunPCA(pbmc_cca)
+pbmc_cca <- RunPCA(pbmc_cca, do.print = FALSE)
 names(pbmc_cca@dr)
 pbmc_cca <-
     RunTSNE(pbmc_cca, reduction.use = "pca", dims.use = 1:5, perplexity=10)
