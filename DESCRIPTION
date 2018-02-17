@@ -23,3 +23,5 @@ Suggests:
     BiocStyle,
     testthat
 VignetteBuilder: knitr
+URL: https://github.com/kevinrue/SeuratConverter
+BugReports: https://github.com/kevinrue/SeuratConverter/issues
