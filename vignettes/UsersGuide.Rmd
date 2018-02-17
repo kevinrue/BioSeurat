@@ -1,0 +1,223 @@
+---
+title: "User's guide for `SeuratConverter`"
+author:
+- name: Kevin Rue-Albrecht
+  affiliation: Kennedy Institute of Rheumatology, University of Oxford,
+    Headington, Oxford OX3 7FY, UK.
+  email: kevin.rue-albrecht@kennedy.ox.ac.uk
+package: SeuratConverter
+output:
+  BiocStyle::html_document
+abstract: |
+  This package offers a simple conversion from the Seurat
+  class to the SingleCellExperiment class.
+vignette: |
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+# Introduction
+
+This package aims at making `seurat` objects (`r CRANpkg("Seurat")` package)
+accessible for downstream
+processing using common _Bioconductor_ methods and classes.
+In particular, the most readily equivalent _Bioconductor_ class apt
+to store the various components of a `seurat` object is the
+`SingleCellExperiment` class (`r Biocpkg("SingleCellExperiment")` package).
+Indeed, the `SingleCellExperiment` class contains slots to store:
+* any number of _assays_, that encompasses the `@raw.data`, `@data`, and
+    `@scaled.data` slots of a `seurat` object.
+* sample meta-data, that corresponds to the `@meta.data` slot of a `seurat`
+    object.
+* feature meta-data, that encompasses the presence of individual genes in the
+    `@var.genes` slot of a `seurat` object
+* any number of reduced dimensions sets of coordinates, that are usually
+    stored under the `@dr` slot of a `seurat` object
+
+# Pre-requisite
+
+## Installation
+
+The `r Githubpkg("kevinrue/SeuratConverter")` package is currently hosted
+on GitHub, and may be installed as follows:
+
+```{r install, eval=FALSE}
+devtools::install_github("kevinrue/SeuratConverter")
+```
+
+## Loading packages
+
+Let us load the various packages required for this vignette;:
+
+```{r require}
+stopifnot(
+    require(Seurat),
+    require(SingleCellExperiment),
+    require(SeuratConverter)
+)
+```
+
+# Examples
+
+Let us load both `r CRANpkg("Seurat")` and `r Biocpkg("SingleCellExperiment")`
+to set up the workspace
+
+## Minimal `seurat` object
+
+Let us use the demonstration object of the `r CRANpkg("Seurat")` package:
+
+```{r pbmc_small}
+pbmc_raw <- read.table(
+  file = system.file('extdata', 'pbmc_raw.txt', package = 'Seurat'),
+  as.is = TRUE
+)
+pbmc_small <- CreateSeuratObject(raw.data = pbmc_raw)
+pbmc_small
+```
+
+This minimal `seurat` object can be converted to a `SingleCellExperiment`
+as follows:
+
+```{r pbmc_small_sce}
+pbmc_sce <- as(pbmc_small, "SingleCellExperiment")
+pbmc_sce
+```
+
+## Normalised `seurat` object
+
+The `NormalizeData` function merely updates the `@data` slot of `seurat`
+objects (while also storing the associated parameters in
+the `@calc.params` slot):
+
+```{r NormalizeData}
+pbmc_small <- NormalizeData(object = pbmc_small)
+names(pbmc_small@calc.params)
+```
+
+As a consequence, this `seurat` object can be converted to a
+`SingleCellExperiment` without additional difficulty:
+
+```{r NormalizeData_sce}
+pbmc_sce <- as(pbmc_small, "SingleCellExperiment")
+pbmc_sce
+```
+
+**Note:** the normalisation parameters stored in the `@calc.params` slot
+are _not_ transferred to the `SingleCellExperiment` object.
+
+## Scaled `seurat` object
+
+The `ScaleData` function populates the `@scale.data` slot of `seurat`
+objects (while also storing the associated parameters in
+the `@calc.params` slot):
+
+```{r ScaleData}
+pbmc_small <-
+    ScaleData(object = pbmc_small, vars.to.regress = c("nUMI"))
+dim(pbmc_small@scale.data)
+```
+
+The additional information in the `@scale.data` slot is stored as an additional
+assay of the same name in the resulting `SingleCellExperiment` object:
+
+```{r ScaleData_sce}
+pbmc_sce <- as(pbmc_small, "SingleCellExperiment")
+pbmc_sce
+```
+
+## Variable genes
+
+The `FindVariableGenes` function populates the `@var.genes` and `@hvg.info`
+slots of `seurat` objects (while also storing the associated parameters in
+the `@calc.params` slot):
+
+```{r FindVariableGenes}
+pbmc_small <- FindVariableGenes(object = pbmc_small, do.plot = FALSE)
+pbmc_small@var.genes
+```
+
+The information in the `@hvg.info` slot, as well as the presence of individual
+genes in the `@var.genes` slot are stored as columns
+in the `@rowData` slot of the resulting `SingleCellExperiment` object:
+
+```{r FindVariableGenes_sce}
+pbmc_sce <- as(pbmc_small, "SingleCellExperiment")
+pbmc_sce
+```
+
+## Coordinates in reduced dimensions
+
+Functions such as `RunPCA` and `RunTSNE` add their respective coordinates
+under the `@dr` slot (while also storing the associated parameters in
+the `@calc.params` slot):
+
+```{r RunPCA}
+pbmc_small <- RunPCA(pbmc_small)
+names(pbmc_small@dr)
+pbmc_small <-
+    RunTSNE(pbmc_small, reduction.use = "pca", dims.use = 1:5, perplexity=10)
+names(pbmc_small@dr)
+```
+
+Every cell embedding in the `@dr` slot will be transferred to the
+`reducedDims` slot of the resulting `SingleCellExperiment` object:
+
+```{r RunPCA_sce}
+pbmc_sce <- as(pbmc_small, "SingleCellExperiment")
+pbmc_sce
+```
+
+## CCA-aligned
+
+The `RunCCA` function combines two `seurat` objects, and stores
+the reduced dimensions obtained by canonical-correlation analysis (CCA)
+under the `@dr` slot (while also storing the associated parameters in
+the `@calc.params` slot).
+
+```{r RunCCA}
+pbmc1 <- SubsetData(pbmc_small,cells.use = pbmc_small@cell.names[1:40])
+pbmc2 <- SubsetData(pbmc_small,cells.use = pbmc_small@cell.names[41:80])
+pbmc1@meta.data$group <- "group1"
+pbmc2@meta.data$group <- "group2"
+pbmc_cca <- RunCCA(pbmc1,pbmc2)
+pbmc_cca <- AlignSubspace(
+    pbmc_cca,reduction.type = "cca", grouping.var = "group", dims.align = 1:2)
+names(pbmc_cca@dr)
+```
+
+Naturally, PCA and t-SNE reduced dimensions from the original two `seurat`
+objects are _not_ transferred to the new combined `seurat` objects.
+If desired, they need to be re-computed on the new object:
+
+```{r RunCCA_PCA}
+pbmc_cca <- RunPCA(pbmc_cca)
+names(pbmc_cca@dr)
+pbmc_cca <-
+    RunTSNE(pbmc_cca, reduction.use = "pca", dims.use = 1:5, perplexity=10)
+names(pbmc_cca@dr)
+```
+
+Overall, CCA-aligned reduced dimensions are treated no differently than
+other dimensionality reduction embeddings; they are also transferred to
+the `reducedDims` slot of the resulting `SingleCellExperiment` object:
+
+```{r RunCCA_sce}
+pbmc_sce <- as(pbmc_cca, "SingleCellExperiment")
+pbmc_sce
+```
+
+# Session info {.unnumbered}
+
+```{r sessionInfo, echo=FALSE}
+sessionInfo()
+```
