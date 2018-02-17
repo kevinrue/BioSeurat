@@ -59,7 +59,7 @@ devtools::install_github("kevinrue/SeuratConverter")
 
 Let us load the various packages required for this vignette;:
 
-```{r require}
+```{r require, message=FALSE}
 stopifnot(
     require(Seurat),
     require(SingleCellExperiment),
