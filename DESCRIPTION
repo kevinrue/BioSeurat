@@ -1,4 +1,4 @@
-Package: SeuratConverter
+Package: BioSeurat
 Type: Package
 Title: Converter from Seurat to SingleCellExperiment
 Version: 0.99.0
@@ -23,5 +23,5 @@ Suggests:
     BiocStyle,
     testthat
 VignetteBuilder: knitr
-URL: https://github.com/kevinrue/SeuratConverter
-BugReports: https://github.com/kevinrue/SeuratConverter/issues
+URL: https://github.com/kevinrue/BioSeurat
+BugReports: https://github.com/kevinrue/BioSeurat/issues
