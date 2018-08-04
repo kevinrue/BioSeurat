@@ -1,4 +1,4 @@
 library(testthat)
-library(SeuratConverter)
+library(BioSeurat)
 
-test_check("SeuratConverter")
+test_check("BioSeurat")

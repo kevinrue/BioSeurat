@@ -1,6 +1,6 @@
-#' SeuratConverter.
+#' BioSeurat.
 #'
-#' @name SeuratConverter
+#' @name BioSeurat
 #' @docType package
 #' @importFrom methods as
 #' @importClassesFrom Seurat seurat

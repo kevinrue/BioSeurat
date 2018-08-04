@@ -1,11 +1,11 @@
 ---
-title: "User's guide for `SeuratConverter`"
+title: "User's guide for `BioSeurat`"
 author:
 - name: Kevin Rue-Albrecht
   affiliation: Kennedy Institute of Rheumatology, University of Oxford,
     Headington, Oxford OX3 7FY, UK.
   email: kevin.rue-albrecht@kennedy.ox.ac.uk
-package: SeuratConverter
+package: BioSeurat
 output:
   BiocStyle::html_document
 abstract: |
@@ -48,11 +48,11 @@ Indeed, the `SingleCellExperiment` class contains slots to store:
 
 ## Installation
 
-The `r Githubpkg("kevinrue/SeuratConverter")` package is currently hosted
+The `r Githubpkg("kevinrue/BioSeurat")` package is currently hosted
 on GitHub, and may be installed as follows:
 
 ```{r install, eval=FALSE}
-devtools::install_github("kevinrue/SeuratConverter", build_vignettes = TRUE)
+devtools::install_github("kevinrue/BioSeurat", build_vignettes = TRUE)
 ```
 
 ## Loading packages
@@ -63,7 +63,7 @@ Let us load the various packages required for this vignette;:
 stopifnot(
     require(Seurat),
     require(SingleCellExperiment),
-    require(SeuratConverter)
+    require(BioSeurat)
 )
 ```
 
