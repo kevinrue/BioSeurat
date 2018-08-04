@@ -1,7 +1,7 @@
-[![Travis-CI Build Status](https://travis-ci.org/kevinrue/SeuratConverter.svg?branch=master)](https://travis-ci.org/kevinrue/SeuratConverter)
-[![codecov Status](https://codecov.io/gh/kevinrue/SeuratConverter/branch/master/graph/badge.svg?token=By8PFPNXX7)](https://codecov.io/gh/kevinrue/SeuratConverter)
+[![Travis-CI Build Status](https://travis-ci.org/kevinrue/BioSeurat.svg?branch=master)](https://travis-ci.org/kevinrue/BioSeurat)
+[![codecov Status](https://codecov.io/gh/kevinrue/BioSeurat/branch/master/graph/badge.svg?token=By8PFPNXX7)](https://codecov.io/gh/kevinrue/BioSeurat)
 
-# `SeuratConverter`
+# `BioSeurat`
 
 ## Overview
 
@@ -27,9 +27,9 @@ Indeed, the `SingleCellExperiment` class contains slots to store:
 
 ## Installation
 
-The `r Githubpkg("kevinrue/SeuratConverter")` package is currently hosted
+The `r Githubpkg("kevinrue/BioSeurat")` package is currently hosted
 on GitHub, and may be installed as follows:
 
 ```{r install, eval=FALSE}
-devtools::install_github("kevinrue/SeuratConverter", build_vignettes = TRUE)
+devtools::install_github("kevinrue/BioSeurat", build_vignettes = TRUE)
 ```
