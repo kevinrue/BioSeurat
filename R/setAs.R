@@ -4,6 +4,8 @@
 #'
 #' @param from A \code{\linkS4class{seurat}} object.
 #'
+#' @importFrom methods slot
+#'
 #' @return A \code{\linkS4class{SingleCellExperiment}} object.
 #'
 #' @examples
